@@ -75,8 +75,15 @@ class cJDownloaderHandler:
         sAutomaticStart = '0'
         if (bAutomaticDownload == True):
             sAutomaticStart = '1'
-            
-        sUrl = 'http://' + str(sHost) + ':' + str(sPort) + '/action/add/links/grabber' + str(sGrabber) + '/start' + str(sAutomaticStart) + '/' + sFileUrl
+
+        if sPort != '':
+            sUrl = str(sHost) + ':' + str(sPort) + '/action/add/links/grabber' + str(sGrabber) + '/start' + str(sAutomaticStart) + '/' + sFileUrl
+        else:
+            sUrl = str(sHost) + '/action/add/links/grabber' + str(sGrabber) + '/start' + str(sAutomaticStart) + '/' + sFileUrl
+
+        if not sUrl.startswith("http"):
+            sUrl = "http://" + sUrl
+
         return sUrl
 
     def __checkConnection(self):
@@ -84,8 +91,14 @@ class cJDownloaderHandler:
         sHost = self.__getHost()
         sPort = self.__getPort()
 
-        sLinkForJd = 'http://' + str(sHost) + ':' + str(sPort)
-        
+        if sPort != '':
+            sLinkForJd = str(sHost) + ':' + str(sPort)
+        else:
+            sLinkForJd = str(sHost)
+
+        if not sLinkForJd.startswith("http"):
+            sLinkForJd = "http://" + sLinkForJd
+
         try:
             oRequestHandler = cRequestHandler(sLinkForJd)
             oRequestHandler.request()

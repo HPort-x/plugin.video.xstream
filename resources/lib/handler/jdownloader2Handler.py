@@ -27,7 +27,12 @@ class cJDownloader2Handler:
         sHost = self.__getHost()
         sPort = self.__getPort()
         ENCODING = 'utf-8'
-        url = "http://{}:{}/{}".format(sHost,sPort,path)
+        if sPort != '':
+            url = "{}:{}/{}".format(sHost,sPort,path)
+        else:
+            url = "{}/{}".format(sHost,path)
+        if not url.startswith("http"):
+            url = "http://" + url
         if params is not None:
             headers = {"Content-Type": "application/x-www-form-urlencoded;charset={}".format(ENCODING),}
             request = urllib2.Request(url, urllib.urlencode(params).encode(ENCODING), headers)

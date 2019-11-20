@@ -28,10 +28,12 @@ class cPyLoadHandler:
             mydata = urllib.urlencode(mydata)
 
             #check if host has a leading http://
-            if(py_host.find('http://') != 0):
+            if(py_host.find('http') != 0):
                 py_host = 'http://'+py_host
-            logger.info('Attemting to connect to PyLoad at: '+py_host+':'+py_port)
-            req = urllib2.Request(py_host+':'+py_port+'/api/login', mydata)
+            if py_port != ''
+                py_host = py_host+':'+py_port
+            logger.info('Attemting to connect to PyLoad at: '+py_host)
+            req = urllib2.Request(py_host+'/api/login', mydata)
             req.add_header("Content-type", "application/x-www-form-urlencoded")
             page = urllib2.urlopen(req).read()
             page = page[1:]
@@ -40,7 +42,7 @@ class cPyLoadHandler:
             opener.addheaders.append(('Cookie', 'beaker.session.id='+session))
             #pyLoad doesn't like utf-8, so converting Package name to ascii, also stripping any characters that do not belong into a path name (\/:*?"<>|)
             sPackage=str(sPackage).decode("utf-8").encode('ascii','replace').translate(maketrans('\/:*?"<>|', '_________'))
-            py_url=py_host+':'+py_port+'/api/addPackage?name="' + urllib.quote_plus(sPackage) + '"&links=["' + urllib.quote_plus(sUrl) + '"]'
+            py_url=py_host+'/api/addPackage?name="' + urllib.quote_plus(sPackage) + '"&links=["' + urllib.quote_plus(sUrl) + '"]'
             logger.info('PyLoad API call: '+py_url)
             sock = opener.open(py_url)
             logger.info('123')
